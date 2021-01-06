@@ -20,7 +20,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import lombok.AllArgsConstructor;
-
+ 
 @Configuration
 @EnableTransactionManagement
 @AllArgsConstructor
