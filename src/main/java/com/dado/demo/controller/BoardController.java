@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 @Controller
 @RequestMapping("/board")
 public class BoardController {
+	
 	private BoardService service;
 	
 	@GetMapping("list")
