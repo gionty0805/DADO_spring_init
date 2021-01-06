@@ -1,0 +1,4 @@
+spring.profiles.active=local
+logback-local.properties => console-logging
+logback-dev.properties => file-logging
+logback-prod.properties => file-logging,remote-logging
