@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dado.demo.mapper.FileMapper">
+  <select id="selectFileList" resultType = "com.dado.demo.vo.FileVO">
+		SELECT BOARD_ID, POST_ID, file_id, file_name_uuid, file_name_org, upload_path, extension, file_size FROM TB_BOARD_FILES WHERE BOARD_ID = #{board_id} AND POST_ID = #{post_id}
+  </select>
+
+    <insert id="insertFile">
+        INSERT INTO TB_BOARD_FILES (FILE_NAME_UUID, FILE_NAME_ORG, UPLOAD_PATH, EXTENSION, FILE_SIZE, BOARD_ID, POST_ID)
+        VALUES(#{file_name_uuid}, #{file_name_org}, #{upload_path}, #{extension}, #{file_size}, #{board_id}, #{post_id});
+    </insert>
+
+    <delete id="delete_file">
+        DELETE FROM TB_BOARD_FILES WHERE FILE_ID = #{file_id}
+    </delete>
+
+
+</mapper>

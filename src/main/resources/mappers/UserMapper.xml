@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dado.demo.mapper.UserMapper">
+
+  <select id="getUser" resultType = "com.dado.demo.security.CustomUserDetails">
+		SELECT USERID, PASSWORD, USERNAME, ENABLED, REGISTER FROM TB_USER
+		WHERE USERID = #{userid}
+  </select>
+
+    <insert id="insertUser">
+        INSERT INTO TB_USER
+        (USERID, PASSWORD, USERNAME, REGISTER, ENABLED, REGDATE)
+        VALUES(#{username}, #{password}, #{NAME}, 'SYSTEM', false,  CURRENT_TIMESTAMP);
+
+    </insert>
+</mapper>

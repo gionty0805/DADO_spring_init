@@ -1,7 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dado.demo.mapper.BoardMapper">
-  <select id="getBoardList" resultType = "com.dado.demo.vo.BoardVO">
-		select * from tb_board
-	</select>
+  <select id="selectPostList" resultType = "com.dado.demo.vo.BoardPostVO">
+		SELECT B.*, U.USERNAME WRITER_NM
+        FROM (
+            SELECT *
+            FROM TB_BOARD_POST
+            WHERE BOARD_ID = #{board_id} AND DELDATE IS NULL
+            ORDER BY ORIGIN_NO DESC, GROUP_ORD ASC
+            LIMIT #{pageVO.display_start}, #{pageVO.display_rows}
+        ) B
+        JOIN TB_USER U
+        ON B.WRITER = U.USERID
+  </select>
+
+    <insert id="insertPost">
+
+        <selectKey resultType="com.dado.demo.vo.BoardPostVO" keyProperty="group_ord,group_layer,post_id" order="BEFORE">
+            <if test="origin_no != 0">
+                SELECT GROUP_ORD + 1 as GROUP_ORD, GROUP_LAYER + 1 as GROUP_LAYER, 0 as post_id FROM TB_BOARD_POST WHERE POST_ID = #{post_id} AND BOARD_ID = #{board_id}
+            </if>
+            <if test="origin_no == 0">
+                SELECT 0 as GROUP_ORD, 0 as GROUP_LAYER, LAST_INSERT_ID(MAX(POST_ID)) +1 as post_id FROM TB_BOARD_POST WHERE BOARD_ID = #{board_id}
+            </if>
+        </selectKey>
+
+        INSERT INTO TB_BOARD_POST
+        (BOARD_ID, TITLE, cont, WRITER, REGDATE, ORIGIN_NO, GROUP_ORD, GROUP_LAYER)
+        VALUES(#{board_id}, #{title}, #{cont}, #{writer}, NOW(), <if test="origin_no == 0">#{post_id}</if> <if test="origin_no != 0">#{origin_no}</if>, #{group_ord}, #{group_layer})
+
+        <!--<selectKey resultType="int" keyProperty="post_id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>-->
+    </insert>
+
+    <select id="selectPost" resultType="com.dado.demo.vo.BoardPostVO">
+        SELECT B.*, U.USERNAME WRITER_NM FROM TB_BOARD_POST B LEFT JOIN TB_USER U ON B.WRITER = U.USERID
+        WHERE B.POST_ID = #{post_id} AND BOARD_ID = #{board_id} AND DELDATE IS NULL
+    </select>
+
+    <select id="selectPostTotal" resultType="java.lang.Integer">
+    SELECT COUNT(*) FROM TB_BOARD_POST
+    WHERE BOARD_ID = #{board_id} AND DELDATE IS NULL
+    </select>
+
+    <delete id="deletePost">
+        UPDATE TB_BOARD_POST
+        SET DELDATE = NOW()
+        WHERE BOARD_ID = #{board_id} AND POST_ID = #{post_id}
+    </delete>
+
+    <update id="updatePost">
+        UPDATE TB_BOARD_POST
+        SET TITLE=#{title}, cont=#{cont}
+        WHERE BOARD_ID = #{board_id} AND POST_ID = #{post_id}
+    </update>
 </mapper>

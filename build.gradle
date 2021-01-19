@@ -40,6 +40,15 @@ dependencies {
     
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
     implementation 'mysql:mysql-connector-java'
+
+	// sepring security taglib
+	implementation 'org.springframework.security:spring-security-taglibs'
+
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+	//File Util
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
 }
 
 test {

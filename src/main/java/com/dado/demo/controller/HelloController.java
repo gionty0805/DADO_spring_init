@@ -2,23 +2,29 @@ package com.dado.demo.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class HelloController {
-	
-	@RequestMapping(value = "/" , method=RequestMethod.GET) 
-	public String Hello() { // jsp ÆäÀÌÁö È£Ãâ 
-		return "main"; 
-	} 
-	
-	@RequestMapping(value = "/hello" , method=RequestMethod.GET) 
-	public String Hello(Model model) { // Spring ¿¡¼­ Á¦°øÇÏ´Â Model °´Ã¼¸¦ »ç¿ëÇÏ¿© ºäÆäÀÌÁö¿¡ µ¥ÀÌÅÍ¸¦ ³Ñ°ÜÁØ´Ù. 
-		model.addAttribute("name" , "TEST"); // jsp ÆäÀÌÁö È£Ãâ 
-		return "hello"; 
+
+	@GetMapping("/login")
+	public String login(){
+		return "login";
 	}
-		
+
+	@RequestMapping(value = "/" , method=RequestMethod.GET)
+	public String Hello() { // jmesp í˜ì´ì§€ í˜¸ì¶œ
+		return "main";
+	}
+
+	@RequestMapping(value = "/hello" , method=RequestMethod.GET)
+	public String Hello(Model model) { // Spring ì—ì„œ ì œê³µí•˜ëŠ” Model ê°ì²´ë¥¼ ì‚¬ìš©í•˜ì—¬ ë·°í˜ì´ì§€ì— ë°ì´í„°ë¥¼ ë„˜ê²¨ì¤€ë‹¤.
+		model.addAttribute("name" , "TEST"); // jsp í˜ì´ì§€ í˜¸ì¶œ
+		return "hello";
+	}
+
 }
 
 //https://github.com/gionty0805/DADO_spring_init.git
