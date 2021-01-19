@@ -84,8 +84,8 @@
                                 <div class="p-1">
                                     <div class="row align-items-center">
                                         <div class="col-auto">
-                                            <div class="avatar-sm">
-                                                <span class="avatar-title bg-primary-lighten text-secondary rounded text-uppercase fs-6">
+                                            <div class="avatar-xs">
+                                                <span class="avatar-title rounded  bg-primary-lighten text-secondary text-uppercase">
                                                     .${file.extension}
                                                 </span>
                                             </div>
@@ -119,53 +119,56 @@
                 <hr class="m-0">
                 <div class="mt-3">
                     <div class="media">
-                        <img class="mr-2 rounded" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
+                        <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
                         <div class="media-body">
-                            <h5 class="m-0">Sansa Stark </h5>
-                            <p class="text-muted mb-0"><small>2 mins ago</small></p>
+                            <h5 class="mt-0">Jeremy Tomlinson <small class="text-muted float-right">5 hours ago</small></h5>
+                            Nice work, makes me think of The Money Pit.
 
-                            <p class="my-1">This is awesome! Proud of sis :) Waiting for you to
-                                come back to winterfall</p>
+                            <br>
+                            <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
 
-                            <div>
-                                <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted p-0">
-                                    <i class="uil uil-heart mr-1"></i> Like
+                            <div class="media mt-3">
+                                <a class="pr-2" href="#">
+                                    <img src="/resources/images/avartar.png" class="rounded-circle" alt="Generic placeholder image" height="32">
                                 </a>
-                                <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted p-0 pl-2">
-                                    <i class="uil uil-comments-alt mr-1"></i> Reply
-                                </a>
+                                <div class="media-body">
+                                    <h5 class="mt-0">Thelma Fridley <small class="text-muted float-right">3 hours ago</small></h5>
+                                    i'm in the middle of a timelapse animation myself! (Very different though.) Awesome stuff.
+
+                                    <br>
+                                    <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2">
+                                        <i class="mdi mdi-reply"></i> Reply
+                                    </a>
+                                </div>
                             </div>
-
-                            <div class="media mt-3">
-                                <img class="mr-2 rounded" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
-                                <div class="media-body">
-                                    <h5 class="m-0">Cersei Lannister </h5>
-                                    <p class="text-muted mb-0"><small>1 min ago</small></p>
-
-                                    <p class="my-1">I swear! She won't be able to reach to winterfall</p>
-                                </div> <!-- end media-body -->
-                            </div> <!-- end media-->
-
-                            <div class="media mt-3">
-                                <img class="mr-2 rounded" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
-                                <div class="media-body">
-                                    <h5 class="m-0">Cersei Lannister </h5>
-                                    <p class="text-muted mb-0"><small>1 min ago</small></p>
-
-                                    <p class="my-1">I swear! She won't be able to reach to winterfall</p>
-                                </div> <!-- end media-body -->
-                            </div> <!-- end media-->
-                        </div> <!-- end media-body -->
-                    </div> <!-- end media-->
-
-                    <hr>
-
-                    <div class="media mb-2">
-                        <img src="/resources/images/avartar.png" height="32" class="align-self-start rounded mr-2" alt="Arya Stark">
+                        </div>
+                    </div>
+                    <div class="media mt-3">
+                        <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
                         <div class="media-body">
-                            <input type="text" class="form-control border-0 form-control-sm" placeholder="이곳에 댓글을 입력하세요">
-                        </div> <!-- end medi-body -->
-                    </div> <!-- end media-->
+                            <h5 class="mt-0">Kevin Martinez <small class="text-muted float-right">1 day ago</small></h5>
+                            It would be very nice to have.
+
+                            <br>
+                            <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
+                        </div>
+                    </div>
+                    <div class="text-center mt-2">
+                        <a href="javascript:void(0);" class="text-danger"><i class="mdi mdi-spin mdi-loading mr-1"></i> Load more </a>
+                    </div>
+                    <div class="border rounded mt-4">
+                        <form action="#" class="comment-area-box">
+                            <textarea rows="3" class="form-control border-0 resize-none" placeholder="Your comment..."></textarea>
+                            <div class="p-2 bg-light d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="#" class="btn btn-sm px-1 btn-light"><i class="mdi mdi-upload"></i></a>
+                                    <a href="#" class="btn btn-sm px-1 btn-light"><i class="mdi mdi-at"></i></a>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-success"><i class="uil uil-message mr-1"></i>Submit</button>
+                            </div>
+                        </form>
+                    </div>
+
 
                 </div>
 

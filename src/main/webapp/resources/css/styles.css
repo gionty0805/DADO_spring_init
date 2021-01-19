@@ -95,6 +95,10 @@ body {
     height: 2rem;
     width: 2rem;
 }
+.avatar-xs {
+    height: 1.5rem;
+    width: 1.5rem;
+}
 .rounded {
     border-radius: .25rem!important;
 }
@@ -132,6 +136,7 @@ img {
     -ms-flex-pack: center;
     justify-content: center;
     width: 100%;
+    font-size: 0.5rem;
 }
 
 @keyframes spinner-border {
@@ -179,4 +184,18 @@ img {
     color: #313a46;
     background-color: #fff;
     border: 1px solid #dee2e6;
+}
+.mt-0, .my-0 {
+    margin-top: 0!important;
+}
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin: 10px 0;
+    font-weight: 700;
+    line-height: 1.1;
+}
+.h5, h5 {
+    font-size: .9375rem;
+}
+.font-13 {
+    font-size: 13px!important;
 }

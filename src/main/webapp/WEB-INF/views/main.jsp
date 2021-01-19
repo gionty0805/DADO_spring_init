@@ -15,6 +15,7 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item"><a href="/board/list/7/1" class="alert-link">Community</a></li>
                 <li class="list-group-item">Survey</li>
+                <li class="list-group-item">Calendar</li>
                 <li class="list-group-item">Chat</li>
                 <li class="list-group-item">Electronic authorization</li>
                 <li class="list-group-item">Shopping</li>
