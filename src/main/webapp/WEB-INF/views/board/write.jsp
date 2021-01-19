@@ -71,7 +71,7 @@
             <%@include file="../inc/inc-fileuploader.jsp" %>
         </div>
 
-        <div class="row mt-3">
+        <div class="row mt-3 ${sort == 'update' ? '' : 'd-none'}">
             <c:forEach var="file" items="${boardVO.file_list}">
                 <div class="col-md-4" id="${file.file_id}">
                     <div class="card mb-1 shadow-none border">
