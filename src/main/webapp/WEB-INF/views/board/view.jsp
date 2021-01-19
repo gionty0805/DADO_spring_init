@@ -77,9 +77,9 @@
                 <c:if test="${fn:length(board.file_list) > 0}">
                 <hr>
                 <div class="mb-2">&nbsp;<i class="mdi mdi-attachment"></i> 첨부파일(${fn:length(board.file_list)})</div>
-                <div class="row mb-3">
+                <div class="col-12 mb-3 pl-0">
                     <c:forEach var="file" items="${board.file_list}">
-                        <div class="col-md-4">
+                        <div class="col-md-4 pl-0">
                             <div class="card mb-1 shadow-none border">
                                 <div class="p-1">
                                     <div class="row align-items-center">
@@ -111,7 +111,7 @@
                 <!-- end row-->
 
                 <hr class="m-0 mt-3">
-                <div class="my-1">
+                <div class="py-1 bg-light-light">
                     <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted pl-0"><i class="mdi mdi-heart text-danger"></i> 2k Likes</a>
                     <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i class="mdi mdi-comment-multiple-outline"></i> 200 Comments</a>
                     <%--<a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i class="uil uil-share-alt"></i> Share</a>--%>
@@ -121,7 +121,7 @@
                     <div class="media">
                         <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
                         <div class="media-body">
-                            <h5 class="mt-0">Jeremy Tomlinson <small class="text-muted float-right">5 hours ago</small></h5>
+                            <h5 class="mt-0 h5">Jeremy Tomlinson <small class="text-muted float-right">5 hours ago</small></h5>
                             Nice work, makes me think of The Money Pit.
 
                             <br>
@@ -132,9 +132,8 @@
                                     <img src="/resources/images/avartar.png" class="rounded-circle" alt="Generic placeholder image" height="32">
                                 </a>
                                 <div class="media-body">
-                                    <h5 class="mt-0">Thelma Fridley <small class="text-muted float-right">3 hours ago</small></h5>
+                                    <h5 class="mt-0 h5">Thelma Fridley <small class="text-muted float-right">3 hours ago</small></h5>
                                     i'm in the middle of a timelapse animation myself! (Very different though.) Awesome stuff.
-
                                     <br>
                                     <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2">
                                         <i class="mdi mdi-reply"></i> Reply
@@ -146,7 +145,7 @@
                     <div class="media mt-3">
                         <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
                         <div class="media-body">
-                            <h5 class="mt-0">Kevin Martinez <small class="text-muted float-right">1 day ago</small></h5>
+                            <h5 class="mt-0 h5">Kevin Martinez <small class="text-muted float-right">1 day ago</small></h5>
                             It would be very nice to have.
 
                             <br>

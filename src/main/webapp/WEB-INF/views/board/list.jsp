@@ -72,6 +72,8 @@
                 show_toast('','삭제 완료되었습니다','success', 'rgb(30,102,10)');
             }else if('${result}' == 'insert_success'){
                 show_toast('', '등록 완료되었습니다', 'success', 'rgb(30,102,10)');
+            }else if('${result}' == 'update_success'){
+                show_toast('', '수정 완료되었습니다', 'success', 'rgb(30,102,10)');
             }else{
                 show_toast('','오류가 발생했습니다','error', 'rgb(147,31,31)');
             }
