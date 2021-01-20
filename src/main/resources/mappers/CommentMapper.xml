@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dado.demo.mapper.CommentMapper">
+  <select id="selectCommentList" resultType = "com.dado.demo.vo.CommentVO">
+		SELECT B.COMMENT_ID,
+			   B.TARGET_GROUP,
+			   B.TARGET_ID,
+			   B.TARGET_LAYER,
+			   B.cont,
+			   B.WRITER,
+			   U.USERNAME WRITER_NM,
+			   B.REGDATE,
+			   B.DELDATE,
+			   B.ORIGIN_ID
+        FROM (
+			SELECT @ROWNUM :=@ROWNUM +1 AS ROWNUM , C.*
+            FROM TB_COMMENT C, (SELECT @ROWNUM:=0) TMP
+            WHERE C.TARGET_GROUP='BD' AND C.TARGET_ID = #{post_id} AND C.DELDATE IS NULL
+            ORDER BY C.TARGET_ID ASC
+        ) B
+        JOIN TB_USER U
+        ON B.WRITER = U.USERID
+        WHERE B.ROWNUM <![CDATA[<=]]>  #{comment_cnt} AND B.ROWNUM <![CDATA[>]]>  #{comment_cnt}-3
+  </select> 
+</mapper>

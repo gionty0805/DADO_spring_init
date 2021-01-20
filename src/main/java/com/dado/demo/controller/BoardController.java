@@ -1,32 +1,32 @@
 package com.dado.demo.controller;
 
-import com.dado.demo.service.FileService;
-import com.dado.demo.vo.BoardPostVO;
-import com.dado.demo.vo.BoardVO;
-import com.dado.demo.vo.PageDTO;
-import com.dado.demo.vo.PageVO;
-import lombok.extern.log4j.Log4j2;
+import java.io.IOException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.dado.demo.service.BoardService;
-
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
+import com.dado.demo.service.BoardService;
+import com.dado.demo.service.CommentService;
+import com.dado.demo.service.FileService;
+import com.dado.demo.vo.BoardPostVO;
+import com.dado.demo.vo.CommentVO;
+import com.dado.demo.vo.PageDTO;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @AllArgsConstructor
 @Controller
 @RequestMapping("/board")
 public class BoardController {
-	
+
 	BoardService service;
+	CommentService commentService;
 	FileService fileService;
 	
 	@GetMapping("list/{board_id}/{pageVO.page_no}")
@@ -67,9 +67,10 @@ public class BoardController {
 		return "redirect:/board/list/"+vo.getBoard_id()+"/1"; //1page
 	}
 
-	@GetMapping("view/{board_id}/{post_id}")
-	public String view(Model model, BoardPostVO vo) {
+	@GetMapping("view/{board_id}/{post_id}/{comment_cnt}")
+	public String view(Model model, BoardPostVO vo, CommentVO cvo) {
 		model.addAttribute("board", service.getPost(vo));
+		model.addAttribute("comment",commentService.getCommentList(cvo));
 		return "/board/view";
 	}
 

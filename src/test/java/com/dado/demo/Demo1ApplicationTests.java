@@ -2,7 +2,6 @@ package com.dado.demo;
 
 import com.dado.demo.mapper.UserMapper;
 import com.dado.demo.security.CustomUserDetails;
-import jdk.nashorn.internal.objects.annotations.Setter;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ class Demo1ApplicationTests {
 				.userid("test2")
 				.password(encoder.encode("2"))
 				.isEnabled(true)
-				.name("Å×½ºÆ®Åõ").build());
+				.name("ï¿½×½ï¿½Æ®ï¿½ï¿½").build());
 	}
 
 	@Test

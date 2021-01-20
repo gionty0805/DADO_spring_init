@@ -112,18 +112,45 @@
 
                 <hr class="m-0 mt-3">
                 <div class="py-1 bg-light-light">
-                    <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted pl-0"><i class="mdi mdi-heart text-danger"></i> 2k Likes</a>
-                    <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i class="mdi mdi-comment-multiple-outline"></i> 200 Comments</a>
+                    <!-- <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted pl-0"><i class="mdi mdi-heart text-danger"></i> 2k Likes</a>
+                    <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i class="mdi mdi-comment-multiple-outline"></i> 200 Comments</a> -->
                     <%--<a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i class="uil uil-share-alt"></i> Share</a>--%>
                 </div>
                 <hr class="m-0">
                 <div class="mt-3">
-                    <div class="media">
+	                <c:if test="${fn:length(comment) == 0}">
+	                    <tr><td colspan="3" class="text-center">아직 등록된 댓글이 없어요</td></tr>
+	                </c:if>
+	                <c:forEach items="${comment}" var="comment">
+	                    <div class="media mt-3">
+	                        <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
+	                        <div class="media-body">
+	                            <h5 class="mt-0 h5">${comment.writer_nm}<small class="text-muted float-right">${comment.regdate}</small></h5>
+	                            ${comment.cont}
+	                            <br>
+	                            <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
+	                        </div>
+	                    </div>
+	                </c:forEach>
+	                <!-- <script id="entry-template" type="text/x-handlebars-template">
+						{{#each comment}}
+	                    <div class="media mt-3">
+	                        <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
+	                        <div class="media-body">
+	                            <h5 class="mt-0 h5">{{writer_nm}}<small class="text-muted float-right">{{regdate}}</small></h5>
+	                            {{cont}}
+	                            <br>
+	                            <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
+	                        </div>
+	                    </div>
+						{{/each}}
+					</script>
+					 -->
+                    <!-- <div class="media mt-3">
                         <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
                         <div class="media-body">
-                            <h5 class="mt-0 h5">Jeremy Tomlinson <small class="text-muted float-right">5 hours ago</small></h5>
+                            <h5 class="mt-0 h5">22 Tomlinson <small class="text-muted float-right">5 hours ago</small></h5>
                             Nice work, makes me think of The Money Pit.
-
                             <br>
                             <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
 
@@ -141,19 +168,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="media mt-3">
-                        <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
-                        <div class="media-body">
-                            <h5 class="mt-0 h5">Kevin Martinez <small class="text-muted float-right">1 day ago</small></h5>
-                            It would be very nice to have.
-
-                            <br>
-                            <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
-                        </div>
-                    </div>
+                    </div> -->
                     <div class="text-center mt-2">
-                        <a href="javascript:void(0);" class="text-danger"><i class="mdi mdi-spin mdi-loading mr-1"></i> Load more </a>
+                        <a id="loadmore" href="javascript:fn_loadComment();" class="text-danger"> Load more </a>
                     </div>
                     <div class="border rounded mt-4">
                         <form action="#" class="comment-area-box">
@@ -167,8 +184,6 @@
                             </div>
                         </form>
                     </div>
-
-
                 </div>
 
             </div>
@@ -192,16 +207,16 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <form method="post" action="/board/delete" id="frm_delete">
-    <input type="hidden" name="board_id" value="${board.board_id}"/>
-    <input type="hidden" name="post_id" value="${board.post_id}"/>
+    <input type="hidden" id="board_id" name="board_id" value="${board.board_id}"/>
+    <input type="hidden" id="post_id" name="post_id" value="${board.post_id}"/>
     <sec:csrfInput/>
 </form>
-
 </body>
 
 <%@include file="../inc/inc-footer.jsp" %>
 
 <script>
+    var comment_cnt = 3;
     $(function () {
         $('.dropdown-toggle').dropdown();
     });
@@ -213,5 +228,31 @@
     function delete_post(){
         $("#frm_delete").submit();
     }
+    function fn_loadComment(){
+		comment_cnt += 3;
+        $.ajax({
+            url: "/comment/view",
+            method: "POST",
+            data:{post_id: $("#post_id").val(), comment_cnt: comment_cnt},
+            datatype: "json",
+            beforeSend: function (xhr) {  
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+            	$('#loadmore').html('<i class="mdi mdi-spin mdi-loading mr-1"></i>');
+            },
+            success : function (data) {
+            	var source = $("#entry-template").html();
+            	var template = Handlebars.compile(source); 
+            	
+                var html = template(data);
+                $('body').append(html);
+
+            	$('#loadmore').html(' Load more ');
+            },error: function (request,status,error) {
+                console.error("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                show_toast('','오류가 발생했습니다','error', 'rgb(147,31,31)');
+            }
+        });
+    }
+    
 
 </script>

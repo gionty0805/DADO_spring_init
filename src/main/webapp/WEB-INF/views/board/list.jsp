@@ -47,7 +47,7 @@
                     <tr><td colspan="3" class="text-center">아직 등록된 글이 없어요</td></tr>
                 </c:if>
                 <c:forEach items="${list}" var="board">
-                    <tr class="c-pointer" onclick="location.href='/board/view/${board.board_id}/${board.post_id}'">
+                    <tr class="c-pointer" onclick="location.href='/board/view/${board.board_id}/${board.post_id}/3'">
                         <td>${board.title}</td>
                         <td>${board.writer}</td>
                         <td>${board.regdate}</td>
