@@ -113,8 +113,8 @@
 
                 <hr class="m-0 mt-3">
                 <div class="py-1 bg-light-light">
-                    <!-- <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted pl-0"><i class="mdi mdi-heart text-danger"></i> 2k Likes</a>
-                    <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i class="mdi mdi-comment-multiple-outline"></i> 200 Comments</a> -->
+                    <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted pl-0"><i class="mdi mdi-heart text-danger"></i> 2k Likes</a>
+                    <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i class="mdi mdi-comment-multiple-outline"></i> 200 Comments</a>
                     <%--<a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i class="uil uil-share-alt"></i> Share</a>--%>
                 </div>
                 <hr class="m-0">
@@ -122,8 +122,12 @@
 	                <c:if test="${fn:length(comment) == 0}">
 	                    <tr><td colspan="3" class="text-center">아직 등록된 댓글이 없어요</td></tr>
 	                </c:if>
-	                <c:forEach items="${comment}" var="comment">
-	                    <div class="media mt-3">
+
+                    <c:forEach items="${comment}" var="comment">
+                        <c:if test="${target_layer > 5}">
+                            <c:set var="target_layer" value="5"/> <%--comment_layer_5 이상이 되면 외관상 안좋으니까 5이상은 같은 layer로 표기--%>
+                        </c:if>
+	                    <div class="media mt-3 comment_layer_${target_layer}">
 	                        <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
 	                        <div class="media-body">
 	                            <h5 class="mt-0 h5">${comment.writer_nm}<small class="text-muted float-right">${comment.regdate}</small></h5>
@@ -133,9 +137,10 @@
 	                        </div>
 	                    </div>
 	                </c:forEach>
+
 	                <!-- <script id="entry-template" type="text/x-handlebars-template">
 						{{#each comment}}
-	                    <div class="media mt-3">
+	                    <div class="media mt-3 comment_layer_{{check_max_layer target_layer}}">
 	                        <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
 	                        <div class="media-body">
 	                            <h5 class="mt-0 h5">{{writer_nm}}<small class="text-muted float-right">{{regdate}}</small></h5>
@@ -221,6 +226,17 @@
     var comment_cnt = 3;
     $(function () {
         $('.dropdown-toggle').dropdown();
+
+
+        //max layer가 5 이상인 경우
+        Handlebars.registerHelper("check_max_layer", function (target_layer) {
+            if (parseInt(target_layer) > 5 ) {
+                return 5;
+            }
+            return target_layer;
+        });
+
+
     });
 
     function download(fileName){
