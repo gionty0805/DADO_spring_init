@@ -265,11 +265,11 @@
             	$('#loadmore').html('<i class="mdi mdi-spin mdi-loading mr-1"></i>');
             },
             success : function (data) {
-            	var source = $("#entry-template").html();
+            	/* var source = $("#entry-template").html();
             	var template = Handlebars.compile(source); 
             	
                 var html = template(data);
-                $('body').append(html);
+                $('body').append(html); */
 
             	$('#loadmore').html(' Load more ');
             },error: function (request,status,error) {
