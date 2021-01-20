@@ -19,4 +19,6 @@ public interface BoardService {
     boolean removePost(BoardPostVO vo);
 
     boolean updatePost(BoardPostVO vo);
+
+    boolean updateGroupOrd(BoardPostVO vo);
 }

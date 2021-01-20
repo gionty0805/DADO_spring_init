@@ -20,4 +20,6 @@ public interface BoardMapper {
 	int deletePost(BoardPostVO vo);
 
 	int updatePost(BoardPostVO vo);
+
+	int updateGroupOrd(BoardPostVO vo);
 }

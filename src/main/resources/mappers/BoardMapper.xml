@@ -18,21 +18,37 @@
 
         <selectKey resultType="com.dado.demo.vo.BoardPostVO" keyProperty="group_ord,group_layer,post_id" order="BEFORE">
             <if test="origin_no != 0">
-                SELECT GROUP_ORD + 1 as GROUP_ORD, GROUP_LAYER + 1 as GROUP_LAYER, 0 as post_id FROM TB_BOARD_POST WHERE POST_ID = #{post_id} AND BOARD_ID = #{board_id}
+                SELECT
+                    <if test="group_ord == 0">MAX(GROUP_ORD) + 1</if><if test="group_ord != 0">#{group_ord}</if> as GROUP_ORD,
+                    #{parent_layer} + 1 as GROUP_LAYER,
+                    0 as POST_ID
+                FROM TB_BOARD_POST WHERE ORIGIN_NO = #{origin_no} AND BOARD_ID = #{board_id} LIMIT 0, 1
             </if>
             <if test="origin_no == 0">
-                SELECT 0 as GROUP_ORD, 0 as GROUP_LAYER, LAST_INSERT_ID(MAX(POST_ID)) +1 as post_id FROM TB_BOARD_POST WHERE BOARD_ID = #{board_id}
+                SELECT 0 as GROUP_ORD, 0 as GROUP_LAYER, LAST_INSERT_ID(MAX(POST_ID)) +1 as post_id
+                FROM TB_BOARD_POST WHERE BOARD_ID = #{board_id}
             </if>
         </selectKey>
 
         INSERT INTO TB_BOARD_POST
         (BOARD_ID, TITLE, cont, WRITER, REGDATE, ORIGIN_NO, GROUP_ORD, GROUP_LAYER)
-        VALUES(#{board_id}, #{title}, #{cont}, #{writer}, NOW(), <if test="origin_no == 0">#{post_id}</if> <if test="origin_no != 0">#{origin_no}</if>, #{group_ord}, #{group_layer})
-
-        <!--<selectKey resultType="int" keyProperty="post_id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>-->
+        VALUES(
+            #{board_id},
+            #{title},
+            #{cont},
+            #{writer},
+            NOW(),
+            <if test="origin_no == 0">#{post_id}</if><if test="origin_no != 0">#{origin_no}</if>,
+            #{group_ord},
+            #{group_layer}
+        )
     </insert>
+
+    <update id="updateGroupOrd">
+        UPDATE TB_BOARD_POST
+        SET GROUP_ORD = GROUP_ORD +1
+        WHERE ORIGIN_NO = #{origin_no} AND GROUP_ORD > #{parent_ord}
+    </update>
 
     <select id="selectPost" resultType="com.dado.demo.vo.BoardPostVO">
         SELECT B.*, U.USERNAME WRITER_NM FROM TB_BOARD_POST B LEFT JOIN TB_USER U ON B.WRITER = U.USERID

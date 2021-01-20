@@ -24,8 +24,10 @@ public class BoardPostVO extends BoardVO {
     private Date regdate;
 
     /* 답글 관련*/
-    int origin_no; //원글번호
-    int group_ord; //원글(답글포함)에 대한 순서
+    int origin_no; //root번호 (최초조상님 트리꼭대기)
+    int parent_ord; //group_ord를 업데이트 하기 위한 parent_ord
+    int group_ord; //원글에 대한 순서
+    int parent_layer; //부모의 계층
     int group_layer; //답글 계층 (원글에대한 답글인지 답글에대한 답글인지)
 
     /* 첨부파일 관련*/

@@ -14,7 +14,7 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item"><a href="/board/list/${boardVO.board_id}">Community</a></li>
+                        <li class="breadcrumb-item"><a href="/board/list/${boardVO.board_id}/1">Community</a></li>
                         <li class="breadcrumb-item active">${boardVO.board_name} List</li>
                     </ol>
                 </div>
@@ -48,7 +48,7 @@
                 </c:if>
                 <c:forEach items="${list}" var="board">
                     <tr class="c-pointer" onclick="location.href='/board/view/${board.board_id}/${board.post_id}/3'">
-                        <td>${board.title}</td>
+                        <td><c:forEach var="layer" begin="1" end="${board.group_layer}">&nbsp;&nbsp;</c:forEach><c:if test="${board.group_layer > 0}"><i class="dripicons-arrow-thin-right"></i> </c:if>${board.title}</td>
                         <td>${board.writer}</td>
                         <td>${board.regdate}</td>
                     </tr>

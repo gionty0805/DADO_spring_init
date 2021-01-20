@@ -24,7 +24,7 @@
     <div class="row">
         <c:choose>
             <c:when test="${board.origin_no != 0}">
-                <c:set var="title" value="RE: ${boardVO.title}"/>
+                <c:set var="title" value="${boardVO.title}"/>
                 <c:set var="cont" value="============= 원글 =============<br/><br/>${boardVO.cont}<br/><br/><br/>============= 답글 =============<br/>"/>
                 <c:set var="sort" value="reply"/>
             </c:when>
@@ -43,6 +43,7 @@
                 </c:choose>
             </c:otherwise>
         </c:choose>
+
         <div class="col-12 mb-1">
             <form method="post" action="${sort == 'update' ? '/board/update' : '/board/write'}" id="frm_write">
                 <div class="row">
@@ -55,9 +56,13 @@
                 </div>
                 <div id="file_area"></div>
                 <input type="hidden" name="post_id" value="${boardVO.post_id}"/>
-                <input type="hidden" name="origin_no" value="${boardVO.origin_no}"/>
-                <%--<input type="hidden" name="group_ord" value="${boardVO.group_ord}"/>
-                <input type="hidden" name="group_layer" value="${boardVO.group_layer}"/>--%>
+
+                <c:if test="${sort == 'reply'}">
+                    <input type="hidden" name="origin_no" value="${boardVO.origin_no}"/>
+                    <input type="hidden" name="parent_ord" value="${boardVO.group_ord}"/>
+                    <input type="hidden" name="parent_layer" value="${boardVO.group_layer}"/>
+                </c:if>
+
                 <input type="hidden" name="board_id" value="${boardVO.board_id}"/>
                 <input type="hidden" name="writer" value="<sec:authentication property='principal.USERID'/>"/>
                 <sec:csrfInput/>
@@ -262,52 +267,4 @@
         self.location = '/file/download?fileName='+encodeURIComponent(fileName);
     }
 </script>
-
-
-<div class="d-none">
-
-//file setting to form
-/*var formData = new FormData(document.querySelector('#frm_write'));
-if(result != null){
-for (var i = 0; i < result.length; i++) {
-formData.append('file_list['+i+'].extension', result[i].extension);
-formData.append('file_list['+i+'].file_name_org', result[i].file_name_org);
-formData.append('file_list['+i+'].file_name_uuid', result[i].file_name_uuid);
-formData.append('file_list['+i+'].file_size', result[i].file_size);
-formData.append('file_list['+i+'].upload_path', result[i].upload_path);
-}
-}*/
-/*
-
-var xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function() { // 요청에 대한 콜백
-if (xhr.readyState === xhr.DONE) { // 요청이 완료되면
-if (xhr.status === 200 || xhr.status === 201) {
-//console.log($.parseJSON(xhr.response));
-var response_data = $.parseJSON(xhr.response);
-if(response_data != null){
-location.href='/board/list/${boardVO.board_id}/${boardVO.pageVO.page_no}';
-}else{
-$("#submit-all").addClass('d-none');
-$("#submit-loading").removeClass('d-none');
-}
-
-/!*if(xhr.responseText){
-location.href='/board/list/${boardVO.board_id}/${boardVO.pageVO.page_no}';
-}else{
-$("#submit-all").addClass('d-none');
-$("#submit-loading").removeClass('d-none');
-}*!/
-} else {
-console.error(xhr.responseText);
-$("#submit-loading").addClass('d-none');
-$("#submit-all").removeClass('d-none');
-}
-}
-};
-xhr.open("POST", "/board/write", true);
-xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-xhr.send(formData);
-*/
-</div>
 

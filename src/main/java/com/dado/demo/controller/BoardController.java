@@ -63,6 +63,7 @@ public class BoardController {
 
 	@PostMapping("write")
 	public String write(BoardPostVO vo, RedirectAttributes rttr) throws IOException {
+		log.info(vo);
 		rttr.addFlashAttribute("result", service.registerPost(vo) ? "insert_success" : "error");
 		return "redirect:/board/list/"+vo.getBoard_id()+"/1"; //1page
 	}

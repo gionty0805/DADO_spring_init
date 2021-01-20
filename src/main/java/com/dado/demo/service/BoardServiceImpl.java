@@ -30,7 +30,19 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public boolean registerPost(BoardPostVO vo) {
 		int insert_result = 0;
-		log.info(mapper);
+		log.info(vo);
+
+		//글 답변
+		if(vo.getOrigin_no() != 0){
+
+				if(mapper.updateGroupOrd(vo) > 0){
+					vo.setGroup_ord(vo.getParent_ord() + 1);
+				}else{
+					vo.setGroup_ord(0); //없으면 0을 셋팅해서 쿼리에서 max + 1
+				}
+
+		}
+
 		if(mapper.insertPost(vo) > 0){
 			if(vo.getFile_list() != null){
 				int board_id = vo.getBoard_id(), post_id = vo.getPost_id();
@@ -87,5 +99,10 @@ public class BoardServiceImpl implements BoardService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean updateGroupOrd(BoardPostVO vo) {
+		return mapper.updateGroupOrd(vo) > 0;
 	}
 }
