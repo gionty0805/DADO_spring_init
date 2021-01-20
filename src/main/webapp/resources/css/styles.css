@@ -114,7 +114,7 @@ img {
     color: #98a6ad!important;
 }
 .font-weight-bold {
-    font-weight: 700!important;
+    font-weight: 800!important;
 }
 
 .d-grid {
@@ -374,4 +374,15 @@ img {
     margin-left: 10rem !important;
 }
 
+
+
+.email-menu-list a {
+    color: #6c757d;
+    padding: 12px 5px;
+    display: block;
+    font-size: 15px;
+}
+.font-weight-bold {
+    font-weight: 700!important;
+}
 
