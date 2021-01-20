@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="../inc/inc-header.jsp" %>
 <link href="${pageContext.request.contextPath}/resources/css/styles.css" rel="stylesheet" />
+<link href="${pageContext.request.contextPath}/resources/css/jquery.toast.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -58,6 +59,9 @@
             <div class="d-md-flex justify-content-md-end">
                 <button class="btn btn-sm btn-outline-secondary me-md-2 mr-1" type="button" onclick="location.href='/board/write/${board.board_id}?origin_no=${board.origin_no}&post_id=${board.post_id}'">답글</button>
                 <button class="btn btn-sm btn-outline-secondary me-md-2" type="button" onclick="location.href='/board/list/${board.board_id}/${board.pageVO.page_no}'">목록</button>
+                <button class="btn btn-sm btn-outline-secondary me-md-2" type="button" onclick="add_html()">html 추가 샘플</button>
+                <select id="num_area"></select>
+
             </div>
         </div>
         <div class="col-12">
@@ -76,7 +80,7 @@
 
                 <c:if test="${fn:length(board.file_list) > 0}">
                 <hr>
-                <div class="mb-2">&nbsp;<i class="mdi mdi-attachment"></i> 첨부파일(${fn:length(board.file_list)})</div>
+                    <div class="mb-2">&nbsp;<i class="mdi mdi-attachment"></i> 첨부파일(${fn:length(board.file_list)}) <a href="javascript:download_all()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="한번에 내려받기"><i class="mdi mdi-download-multiple"></i></a></div>
                 <div class="col-12 mb-3 pl-0">
                     <c:forEach var="file" items="${board.file_list}">
                         <div class="col-md-4 pl-0">
@@ -93,7 +97,7 @@
                                             <%--<img src="assets/images/projects/project-1.jpg" class="avatar-sm rounded" alt="file-image">--%>
                                         </div>
                                         <div class="col pl-0">
-                                            <a href="javascript:download('/${file.upload_path}/${file.file_name_uuid}')" class="text-muted font-weight-bold fs-6">${file.file_name_org}<span class="pl-1">${file.file_size} MB</span></a>
+                                            <a href="javascript:download('/${file.upload_path}/${file.file_name_uuid}')" data-file-name="/${file.upload_path}/${file.file_name_uuid}" class="text-muted font-weight-bold fs-6 file-name">${file.file_name_org}<span class="pl-1">${file.file_size} MB</span></a>
                                         </div>
                                         <div class="col-auto">
                                             <!-- Button -->
@@ -213,8 +217,9 @@
 </form>
 </body>
 
+<script src="${pageContext.request.contextPath}/resources/js/handlebars.js"></script>
 <%@include file="../inc/inc-footer.jsp" %>
-
+<script src="${pageContext.request.contextPath}/resources/js/jquery.toast.js"></script>
 <script>
     var comment_cnt = 3;
     $(function () {
@@ -223,6 +228,26 @@
 
     function download(fileName){
         self.location = '/file/download?fileName='+encodeURIComponent(fileName);
+    }
+
+    function download_all(){
+        var iFrameCnt = 0;
+        show_toast('','준비중입니다','warn', 'rgb(147,31,31)');
+        $('.file-name').each(function () {
+            //다음에 알아보도록 하자..
+            //download($(this).data('file-name'));
+            //fnSleep(1000);
+        });
+    }
+
+    function fnSleep(delay){
+        var start = new Date().getTime();
+        while (start + delay > new Date().getTime());
+    }
+
+    function fnCreateIframe(name){
+        var frm = $('<iframe name="' + name + '" style="display: none;"></iframe>');
+        frm.appendTo("body");
     }
 
     function delete_post(){
@@ -255,4 +280,22 @@
     }
     
 
+    function add_html(){
+
+        var data = [{num:1},{num:2},{num:3},{num:4},{num:5}];
+        var source = $('#test-template').html();
+        var template = Handlebars.compile(source);
+        var html = template(data);
+        console.log(html);
+        $('#num_area').append(html);
+    }
+
+
+
+</script>
+
+<script id="test-template" type="text/x-handlebars-template">
+    {{#each .}}
+<option>{{num}}</option>
+    {{/each}}
 </script>
