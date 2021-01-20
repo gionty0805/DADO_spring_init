@@ -51,7 +51,7 @@
                         <input class="form-control" type="text" id="title" name="title" placeholder="제목을 입력하세요" required="true" value="${title}">
                     </div>
                     <div class="col-12">
-                        <textarea id="summernote" id="cont" name="cont" required="true">${cont}</textarea>
+                        <textarea id="summernote" id="cont" name="cont" required="true" style="display: none">${cont}</textarea>
                     </div>
                 </div>
                 <div id="file_area"></div>

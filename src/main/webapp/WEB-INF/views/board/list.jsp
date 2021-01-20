@@ -28,7 +28,20 @@
                 <button class="btn btn-sm btn-outline-secondary me-md-2" type="button" onclick="location.href='/board/write/${boardVO.board_id}'">새 글 작성</button>
             </div>
         </div>
-        <div class="col-12">
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action bg-secondary text-white">
+                    일반게시판
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">공지사항</a>
+                <button type="button" class="list-group-item list-group-item-action">Q&A</button>
+                <button type="button" class="list-group-item list-group-item-action">FAQ</button>
+                <a href="#" class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true">폐지게시판</a>
+            </div>
+        </div>
+        <div class="col-9">
             <table class="table table-hover table-centered mb-0">
                 <thead>
                 <colgroup>
@@ -56,10 +69,13 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="row">
         <div class="col-12 mt-3">
             <%@include file="../inc/inc-pagination.jsp" %>
         </div>
     </div>
+
 </div>
 </body>
 
