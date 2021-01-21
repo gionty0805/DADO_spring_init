@@ -21,5 +21,4 @@ public interface BoardMapper {
 
 	int updatePost(BoardPostVO vo);
 
-	int updateGroupOrd(BoardPostVO vo);
 }

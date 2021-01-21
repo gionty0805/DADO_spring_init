@@ -58,8 +58,8 @@
                 <input type="hidden" name="post_id" value="${boardVO.post_id}"/>
 
                 <c:if test="${sort == 'reply'}">
+                    <input type="hidden" name="parent_id" value="${boardVO.post_id}"/>
                     <input type="hidden" name="origin_no" value="${boardVO.origin_no}"/>
-                    <input type="hidden" name="parent_ord" value="${boardVO.group_ord}"/>
                     <input type="hidden" name="parent_layer" value="${boardVO.group_layer}"/>
                 </c:if>
 

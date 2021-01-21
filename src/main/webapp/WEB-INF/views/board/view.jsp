@@ -57,7 +57,7 @@
         </c:if>
         <div class="col-6">
             <div class="d-md-flex justify-content-md-end">
-                <button class="btn btn-sm btn-outline-secondary me-md-2 mr-1" type="button" onclick="location.href='/board/write/${board.board_id}?origin_no=${board.origin_no}&post_id=${board.post_id}&group_ord=${board.group_ord}'">답글</button>
+                <button class="btn btn-sm btn-outline-secondary me-md-2 mr-1" type="button" onclick="location.href='/board/write/${board.board_id}?origin_no=${board.origin_no}&post_id=${board.post_id}&parent_id=${board.post_id}'">답글</button>
                 <button class="btn btn-sm btn-outline-secondary me-md-2" type="button" onclick="location.href='/board/list/${board.board_id}/${board.pageVO.page_no}'">목록</button>
             </div>
         </div>

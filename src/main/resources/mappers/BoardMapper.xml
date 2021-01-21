@@ -2,36 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dado.demo.mapper.BoardMapper">
   <select id="selectPostList" resultType = "com.dado.demo.vo.BoardPostVO">
-		SELECT B.*, U.USERNAME WRITER_NM
-        FROM (
-            SELECT *
-            FROM TB_BOARD_POST
-            WHERE BOARD_ID = #{board_id} AND DELDATE IS NULL
-            ORDER BY ORIGIN_NO DESC, GROUP_ORD ASC
-            LIMIT #{pageVO.display_start}, #{pageVO.display_rows}
-        ) B
-        JOIN TB_USER U
-        ON B.WRITER = U.USERID
+
+        WITH RECURSIVE CTE AS (
+            SELECT b.*, CAST(b.POST_ID as CHAR(50)) AS lvl FROM TB_BOARD_POST b
+            WHERE b.GROUP_LAYER = 0
+            UNION ALL
+            SELECT A.*, CONCAT(C.lvl,',',A.POST_ID) AS lvl FROM TB_BOARD_POST A
+            INNER JOIN CTE C ON C.POST_ID = A.PARENT_ID
+        )
+        SELECT C.*, U.USERNAME WRITER_NM FROM CTE C JOIN TB_USER U ON C.WRITER = U.USERID
+        ORDER BY ORIGIN_NO DESC, lvl ASC
+        LIMIT #{pageVO.display_start}, #{pageVO.display_rows}
+
   </select>
 
     <insert id="insertPost">
 
-        <selectKey resultType="com.dado.demo.vo.BoardPostVO" keyProperty="group_ord,group_layer,post_id" order="BEFORE">
+        <selectKey resultType="com.dado.demo.vo.BoardPostVO" keyProperty="group_layer,post_id" order="BEFORE">
             <if test="origin_no != 0">
-                SELECT
-                    <if test="group_ord == 0">MAX(GROUP_ORD) + 1</if><if test="group_ord != 0">#{group_ord}</if> as GROUP_ORD,
-                    #{parent_layer} + 1 as GROUP_LAYER,
-                    0 as POST_ID
+                SELECT #{parent_layer} + 1 as GROUP_LAYER,
+                    LAST_INSERT_ID(MAX(POST_ID)) +1 as POST_ID
                 FROM TB_BOARD_POST WHERE ORIGIN_NO = #{origin_no} AND BOARD_ID = #{board_id} LIMIT 0, 1
             </if>
             <if test="origin_no == 0">
-                SELECT 0 as GROUP_ORD, 0 as GROUP_LAYER, LAST_INSERT_ID(MAX(POST_ID)) +1 as post_id
+                SELECT 0 as GROUP_LAYER,
+                    LAST_INSERT_ID(MAX(POST_ID)) +1 as post_id
                 FROM TB_BOARD_POST WHERE BOARD_ID = #{board_id}
             </if>
         </selectKey>
 
         INSERT INTO TB_BOARD_POST
-        (BOARD_ID, TITLE, cont, WRITER, REGDATE, ORIGIN_NO, GROUP_ORD, GROUP_LAYER)
+        (BOARD_ID, TITLE, cont, WRITER, REGDATE, ORIGIN_NO, PARENT_ID, GROUP_LAYER)
         VALUES(
             #{board_id},
             #{title},
@@ -39,16 +40,10 @@
             #{writer},
             NOW(),
             <if test="origin_no == 0">#{post_id}</if><if test="origin_no != 0">#{origin_no}</if>,
-            #{group_ord},
+            #{parent_id},
             #{group_layer}
         )
     </insert>
-
-    <update id="updateGroupOrd">
-        UPDATE TB_BOARD_POST
-        SET GROUP_ORD = GROUP_ORD +1
-        WHERE ORIGIN_NO = #{origin_no} AND GROUP_ORD > #{parent_ord}
-    </update>
 
     <select id="selectPost" resultType="com.dado.demo.vo.BoardPostVO">
         SELECT B.*, U.USERNAME WRITER_NM FROM TB_BOARD_POST B LEFT JOIN TB_USER U ON B.WRITER = U.USERID

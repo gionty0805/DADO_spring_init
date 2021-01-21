@@ -71,7 +71,7 @@ public class BoardController {
 	@GetMapping("view/{board_id}/{post_id}/{comment_cnt}")
 	public String view(Model model, BoardPostVO vo, CommentVO cvo) {
 		model.addAttribute("board", service.getPost(vo));
-		model.addAttribute("comment",commentService.getCommentList(cvo));
+		//model.addAttribute("comment",commentService.getCommentList(cvo));
 		return "/board/view";
 	}
 

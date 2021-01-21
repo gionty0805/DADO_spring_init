@@ -20,5 +20,4 @@ public interface BoardService {
 
     boolean updatePost(BoardPostVO vo);
 
-    boolean updateGroupOrd(BoardPostVO vo);
 }
