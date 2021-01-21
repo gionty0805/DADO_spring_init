@@ -124,7 +124,7 @@
 	                </c:if>
 
                     <c:forEach items="${comment}" var="comment">
-                        <c:if test="${target_layer > 5}">
+                        <c:if test="${comment.target_layer > 5}">
                             <c:set var="target_layer" value="5"/> <%--comment_layer_5 이상이 되면 외관상 안좋으니까 5이상은 같은 layer로 표기--%>
                         </c:if>
 	                    <div class="media mt-3 comment_layer_${target_layer}">
@@ -133,9 +133,10 @@
 	                            <h5 class="mt-0 h5">${comment.writer_nm}<small class="text-muted float-right">${comment.regdate}</small></h5>
 	                            ${comment.cont}
 	                            <br>
-	                            <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
+	                            <a id="reply_btn_${comment.comment_id}" href="javascript: fn_reply(${comment.target_layer},${comment.comment_id});" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
 	                        </div>
 	                    </div>
+	                    <section id="reply_${comment.comment_id}"></section>
 	                </c:forEach>
 	                <section id=comment_area></section>
                     <div class="text-center mt-2">
@@ -149,7 +150,7 @@
                                     <a href="#" class="btn btn-sm px-1 btn-light"><i class="mdi mdi-upload"></i></a>
                                     <a href="#" class="btn btn-sm px-1 btn-light"><i class="mdi mdi-at"></i></a>
                                 </div>
-                                <button type="submit" class="btn btn-sm btn-success"><i class="uil uil-message mr-1"></i>Submit</button>
+                                <button type="button" onclick="fn_reply_call(this);" class="btn btn-sm btn-success"><i class="uil uil-message mr-1"></i>Submit</button>
                             </div>
                         </form>
                     </div>
@@ -198,10 +199,7 @@
             }
             return target_layer;
         });
-
-
     });
-
     function download(fileName){
         self.location = '/file/download?fileName='+encodeURIComponent(fileName);
     }
@@ -251,7 +249,6 @@
                 var source = $('#entry-template').html();
                 var template = Handlebars.compile(source);
                 var html = template(data);
-                console.log(data);
                 $('#comment_area').append(html);
             	$('#loadmore').html(' Load more ');
             },error: function (request,status,error) {
@@ -261,17 +258,20 @@
         });
     }
     
-
-    /* function add_html(){
-
-        var data = [{num:1},{num:2},{num:3},{num:4},{num:5}];
-        var source = $('#test-template').html();
+	function fn_reply(layer,id){
+		$('#reply_btn_'+id).remove();
+        var source = $('#reply-template').html();
         var template = Handlebars.compile(source);
+        var data =[{layer:layer+1,id:id}];
         var html = template(data);
-        console.log(html);
-        $('#num_area').append(html);
-    }
- */
+        $('#reply_'+id).append(html);
+	}
+	
+	function fn_reply_call(dom){
+		var comment_res = $(dom).parent().parent().children().eq(0).val();
+		alert("댓글금지!");
+	}
+
 </script>
 <script id="entry-template" type="text/x-handlebars-template">
 	{{#each .}}
@@ -281,8 +281,24 @@
 	        <h5 class="mt-0 h5">{{writer_nm}}<small class="text-muted float-right">{{regdate}}</small></h5>
 	        {{cont}}
 	        <br>
-	        <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
+	        <a id="reply_btn_{{comment_id}}"href="javascript: fn_reply({{target_layer}},{{comment_id}});" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
 	     </div>
 	</div>
+	<section id="reply_{{comment_id}}"></section>
 	{{/each}}
+</script>
+
+<script id="reply-template" type="text/x-handlebars-template">
+    <div class="border rounded mt-4">
+         <form action="#" class="comment-area-box">
+            <textarea rows="3" class="form-control border-0 resize-none" placeholder="Your comment..."></textarea>
+            <div class="p-2 bg-light d-flex justify-content-between align-items-center">
+            	<div>
+            		<a href="#" class="btn btn-sm px-1 btn-light"><i class="mdi mdi-upload"></i></a>
+            		<a href="#" class="btn btn-sm px-1 btn-light"><i class="mdi mdi-at"></i></a>
+            	</div>
+            	<button type="button" onclick="fn_reply_call(this);" class="btn btn-sm btn-success"><i class="uil uil-message mr-1"></i>Submit</button>
+            </div>
+         </form>
+    </div>
 </script>

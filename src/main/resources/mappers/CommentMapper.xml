@@ -2,24 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dado.demo.mapper.CommentMapper">
   <select id="selectCommentList" resultType = "com.dado.demo.vo.CommentVO">
-		SELECT B.COMMENT_ID,
-			   B.TARGET_GROUP,
-			   B.TARGET_ID,
-			   B.TARGET_LAYER,
-			   B.cont,
-			   B.WRITER,
-			   U.USERNAME WRITER_NM,
-			   B.REGDATE,
-			   B.DELDATE,
-			   B.ORIGIN_ID
-        FROM (
-			SELECT *
-            FROM TB_COMMENT
-            WHERE TARGET_GROUP='BD' AND TARGET_ID = #{post_id} AND DELDATE IS NULL
-            ORDER BY ORIGIN_ID DESC
-            LIMIT #{comment_cnt}, 3
-        ) B
-        JOIN TB_USER U
-        ON B.WRITER = U.USERID
+        WITH RECURSIVE CTE AS (
+            SELECT b.*, CAST(b.COMMENT_ID as CHAR(50)) AS lvl FROM 
+            (SELECT 
+               COMMENT_ID,
+			   TARGET_GROUP,
+			   TARGET_ID,
+			   TARGET_LAYER,
+			   cont,
+			   WRITER,
+			   REGDATE,
+			   DELDATE,
+			   ORIGIN_NO,
+			   PARENT_ID
+            FROM TB_COMMENT WHERE TARGET_GROUP = 'BD')
+             b
+            WHERE b.TARGET_LAYER = 0
+            UNION ALL
+            SELECT A.*, CONCAT(C.lvl,',',A.COMMENT_ID) AS lvl FROM 
+            (SELECT 
+               COMMENT_ID,
+			   TARGET_GROUP,
+			   TARGET_ID,
+			   TARGET_LAYER,
+			   cont,
+			   WRITER,
+			   REGDATE,
+			   DELDATE,
+			   ORIGIN_NO,
+			   PARENT_ID
+            FROM TB_COMMENT WHERE TARGET_GROUP = 'BD') 
+             A
+            INNER JOIN CTE C ON C.COMMENT_ID = A.PARENT_ID
+        )
+        SELECT C.*, U.USERNAME WRITER_NM FROM CTE C JOIN TB_USER U ON C.WRITER = U.USERID
+        ORDER BY ORIGIN_NO DESC, lvl ASC
+        LIMIT #{comment_cnt}, 3
   </select> 
 </mapper>
