@@ -13,13 +13,13 @@
 			   B.DELDATE,
 			   B.ORIGIN_ID
         FROM (
-			SELECT @ROWNUM :=@ROWNUM +1 AS ROWNUM , C.*
-            FROM TB_COMMENT C, (SELECT @ROWNUM:=0) TMP
-            WHERE C.TARGET_GROUP='BD' AND C.TARGET_ID = #{post_id} AND C.DELDATE IS NULL
-            ORDER BY C.TARGET_ID ASC
+			SELECT *
+            FROM TB_COMMENT
+            WHERE TARGET_GROUP='BD' AND TARGET_ID = #{post_id} AND DELDATE IS NULL
+            ORDER BY ORIGIN_ID DESC
+            LIMIT #{comment_cnt}, 3
         ) B
         JOIN TB_USER U
         ON B.WRITER = U.USERID
-        WHERE B.ROWNUM <![CDATA[<=]]>  #{comment_cnt} AND B.ROWNUM <![CDATA[>]]>  #{comment_cnt}-3
   </select> 
 </mapper>

@@ -33,8 +33,7 @@ public class CommentController {
 	@PostMapping("view")
 	@ResponseBody
 	public List<CommentVO> view_post(Model model, CommentVO cvo) {
-		
-		return commnetservice.getCommentList(cvo);
+		List<CommentVO> list = commnetservice.getCommentList(cvo);
+		return list;
 	}
-
 }

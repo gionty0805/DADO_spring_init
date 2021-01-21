@@ -137,44 +137,7 @@
 	                        </div>
 	                    </div>
 	                </c:forEach>
-
-	                <!-- <script id="entry-template" type="text/x-handlebars-template">
-						{{#each comment}}
-	                    <div class="media mt-3 comment_layer_{{check_max_layer target_layer}}">
-	                        <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
-	                        <div class="media-body">
-	                            <h5 class="mt-0 h5">{{writer_nm}}<small class="text-muted float-right">{{regdate}}</small></h5>
-	                            {{cont}}
-	                            <br>
-	                            <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
-	                        </div>
-	                    </div>
-						{{/each}}
-					</script>
-					 -->
-                    <!-- <div class="media mt-3">
-                        <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
-                        <div class="media-body">
-                            <h5 class="mt-0 h5">22 Tomlinson <small class="text-muted float-right">5 hours ago</small></h5>
-                            Nice work, makes me think of The Money Pit.
-                            <br>
-                            <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
-
-                            <div class="media mt-3">
-                                <a class="pr-2" href="#">
-                                    <img src="/resources/images/avartar.png" class="rounded-circle" alt="Generic placeholder image" height="32">
-                                </a>
-                                <div class="media-body">
-                                    <h5 class="mt-0 h5">Thelma Fridley <small class="text-muted float-right">3 hours ago</small></h5>
-                                    i'm in the middle of a timelapse animation myself! (Very different though.) Awesome stuff.
-                                    <br>
-                                    <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2">
-                                        <i class="mdi mdi-reply"></i> Reply
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
+	                <section id=comment_area></section>
                     <div class="text-center mt-2">
                         <a id="loadmore" href="javascript:fn_loadComment();" class="text-danger"> Load more </a>
                     </div>
@@ -223,7 +186,7 @@
 <%@include file="../inc/inc-footer.jsp" %>
 <script src="${pageContext.request.contextPath}/resources/js/jquery.toast.js"></script>
 <script>
-    var comment_cnt = 3;
+    var comment_cnt = 0;
     $(function () {
         $('.dropdown-toggle').dropdown();
 
@@ -271,19 +234,25 @@
         $.ajax({
             url: "/comment/view",
             method: "POST",
-            data:{post_id: $("#post_id").val(), comment_cnt: comment_cnt},
+            data:{
+            	post_id: $("#post_id").val(), 
+            	comment_cnt: comment_cnt
+            },
             datatype: "json",
-            beforeSend: function (xhr) {  
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
             	$('#loadmore').html('<i class="mdi mdi-spin mdi-loading mr-1"></i>');
             },
             success : function (data) {
             	/* var source = $("#entry-template").html();
-            	var template = Handlebars.compile(source); 
-            	
+            	var template = Handlebars.compile(source);
                 var html = template(data);
                 $('body').append(html); */
-
+                var source = $('#entry-template').html();
+                var template = Handlebars.compile(source);
+                var html = template(data);
+                console.log(data);
+                $('#comment_area').append(html);
             	$('#loadmore').html(' Load more ');
             },error: function (request,status,error) {
                 console.error("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -293,7 +262,7 @@
     }
     
 
-    function add_html(){
+    /* function add_html(){
 
         var data = [{num:1},{num:2},{num:3},{num:4},{num:5}];
         var source = $('#test-template').html();
@@ -302,5 +271,18 @@
         console.log(html);
         $('#num_area').append(html);
     }
-
+ */
+</script>
+<script id="entry-template" type="text/x-handlebars-template">
+	{{#each .}}
+	<div class="media mt-3 comment_layer_{{check_max_layer target_layer}}">
+	  <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
+	     <div class="media-body">
+	        <h5 class="mt-0 h5">{{writer_nm}}<small class="text-muted float-right">{{regdate}}</small></h5>
+	        {{cont}}
+	        <br>
+	        <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
+	     </div>
+	</div>
+	{{/each}}
 </script>
