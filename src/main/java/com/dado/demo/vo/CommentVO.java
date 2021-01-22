@@ -27,8 +27,9 @@ public class CommentVO extends BoardVO {
     @DateTimeFormat(pattern = "yyyy.MM.dd HH:mm")
     private Date deldate;
     private int post_id;
-    private int origin_id;
+    private int origin_no;
     private int comment_cnt;
+    private int parent_id;
     /* 첨부파일 관련*/
     // 무시 ..
 }

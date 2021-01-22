@@ -120,20 +120,23 @@
                 <hr class="m-0">
                 <div class="mt-3">
 	                <c:if test="${fn:length(comment) == 0}">
-	                    <tr><td colspan="3" class="text-center">아직 등록된 댓글이 없어요</td></tr>
+	                <div id="no_content" >
+	                    <tr ><td colspan="3" class="text-center">아직 등록된 댓글이 없어요</td></tr>
+	                </div>
 	                </c:if>
 
                     <c:forEach items="${comment}" var="comment">
                         <c:if test="${comment.target_layer > 5}">
                             <c:set var="target_layer" value="5"/> <%--comment_layer_5 이상이 되면 외관상 안좋으니까 5이상은 같은 layer로 표기--%>
+							<c:out value="${target_layer}" />
                         </c:if>
-	                    <div class="media mt-3 comment_layer_${target_layer}">
+	                    <div class="media mt-3 comment_layer_<c:if test="${comment.target_layer > 5}">5</c:if><c:if test="${comment.target_layer <= 5}">${comment.target_layer}</c:if>">
 	                        <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
 	                        <div class="media-body">
 	                            <h5 class="mt-0 h5">${comment.writer_nm}<small class="text-muted float-right">${comment.regdate}</small></h5>
 	                            ${comment.cont}
 	                            <br>
-	                            <a id="reply_btn_${comment.comment_id}" href="javascript: fn_reply(${comment.target_layer},${comment.comment_id});" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
+	                            <a id="reply_btn_${comment.comment_id}" href="javascript: fn_reply(${comment.target_layer},${comment.comment_id},${comment.origin_no});" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
 	                        </div>
 	                    </div>
 	                    <section id="reply_${comment.comment_id}"></section>
@@ -145,6 +148,9 @@
                     <div class="border rounded mt-4">
                         <form action="#" class="comment-area-box">
                             <textarea rows="3" class="form-control border-0 resize-none" placeholder="Your comment..."></textarea>
+                            <input type="hidden" value="0"/>
+							<input type="hidden" value="0"/>
+							<input type="hidden" value="0"/>
                             <div class="p-2 bg-light d-flex justify-content-between align-items-center">
                                 <div>
                                     <a href="#" class="btn btn-sm px-1 btn-light"><i class="mdi mdi-upload"></i></a>
@@ -179,6 +185,9 @@
 <form method="post" action="/board/delete" id="frm_delete">
     <input type="hidden" id="board_id" name="board_id" value="${board.board_id}"/>
     <input type="hidden" id="post_id" name="post_id" value="${board.post_id}"/>
+    <input type="hidden" id="writer" name="writer" value="<sec:authentication property='principal.USERID'/>"/>  
+    <sec:csrfInput/>
+    <input type="hidden" id="writer_nm" name="writer_nm" value="<sec:authentication property='principal.NAME'/>"/>  
     <sec:csrfInput/>
 </form>
 </body>
@@ -242,10 +251,6 @@
             	$('#loadmore').html('<i class="mdi mdi-spin mdi-loading mr-1"></i>');
             },
             success : function (data) {
-            	/* var source = $("#entry-template").html();
-            	var template = Handlebars.compile(source);
-                var html = template(data);
-                $('body').append(html); */
                 var source = $('#entry-template').html();
                 var template = Handlebars.compile(source);
                 var html = template(data);
@@ -258,18 +263,61 @@
         });
     }
     
-	function fn_reply(layer,id){
+	function fn_reply(layer,id,origin_no){
 		$('#reply_btn_'+id).remove();
         var source = $('#reply-template').html();
         var template = Handlebars.compile(source);
-        var data =[{layer:layer+1,id:id}];
+        var data ={target_layer:layer,comment_id:id,origin_no:origin_no};
         var html = template(data);
         $('#reply_'+id).append(html);
 	}
 	
 	function fn_reply_call(dom){
-		var comment_res = $(dom).parent().parent().children().eq(0).val();
-		alert("댓글금지!");
+		var comment_cont = $(dom).parent().parent().children().eq(0).val();
+		var comment_layer = $(dom).parent().parent().children().eq(1).val();
+		var comment_id = $(dom).parent().parent().children().eq(2).val();
+		var origin_no = $(dom).parent().parent().children().eq(3).val();
+		var post_id = $('#post_id').val();
+		var writer = $('#writer').val();
+		var writer_nm = $('#writer_nm').val();
+		$(dom).html('<i class="mdi mdi-spin mdi-loading mr-1"></i>');
+		$.ajax({
+            url: "/comment/write",
+            method: "POST",
+            data:{
+            	target_id : post_id,
+            	origin_no: origin_no, 
+            	target_layer: comment_layer,
+            	parent_id:comment_id,
+            	cont : comment_cont,
+            	writer : writer 
+            },
+            datatype: "json",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+                $(dom).html('<i class="mdi mdi-spin mdi-loading mr-1"></i>');
+            },
+            success : function (data) {
+                var source = $('#now_entry-template').html();
+                var template = Handlebars.compile(source);
+                var res = {writer_nm:writer_nm,regdate:'Now',target_layer:parseInt(comment_layer)+1,cont:comment_cont}
+                var html = template(res);
+                if(origin_no==0){
+                	$('#comment_area').append(html);
+                	$('#no_content').remove();
+                	$(dom).html('<i class="uil uil-message mr-1"></i>Submit');
+                }
+                else{
+                    $('#submit_'+comment_id).remove();
+                    $('#reply_'+comment_id).append(html);
+                	
+                }
+                show_toast('','입력 완료되었습니다','success', 'rgb(30,102,10)');
+            },error: function (request,status,error) {
+                console.error("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                show_toast('','오류가 발생했습니다','error', 'rgb(147,31,31)');
+            }
+        });
 	}
 
 </script>
@@ -281,18 +329,31 @@
 	        <h5 class="mt-0 h5">{{writer_nm}}<small class="text-muted float-right">{{regdate}}</small></h5>
 	        {{cont}}
 	        <br>
-	        <a id="reply_btn_{{comment_id}}"href="javascript: fn_reply({{target_layer}},{{comment_id}});" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
+	        <a id="reply_btn_{{comment_id}}"href="javascript: fn_reply({{target_layer}},{{comment_id}},{{origin_no}});" class="text-muted font-13 d-inline-block mt-2"><i class="mdi mdi-reply"></i> Reply</a>
 	     </div>
 	</div>
 	<section id="reply_{{comment_id}}"></section>
 	{{/each}}
 </script>
 
+<script id="now_entry-template" type="text/x-handlebars-template">
+	<div class="media mt-3 comment_layer_{{check_max_layer target_layer}}">
+	  <img class="mr-2 rounded-circle" src="/resources/images/avartar.png" alt="Generic placeholder image" height="32">
+	     <div class="media-body">
+	        <h5 class="mt-0 h5">{{writer_nm}}<small class="text-muted float-right">{{regdate}}</small></h5>
+	        {{cont}}
+	        <br>
+	     </div>
+	</div>
+</script>
 <script id="reply-template" type="text/x-handlebars-template">
-    <div class="border rounded mt-4">
+    <div id="submit_{{comment_id}}" class="border rounded mt-4 comment_layer_{{check_max_layer target_layer}}">
          <form action="#" class="comment-area-box">
             <textarea rows="3" class="form-control border-0 resize-none" placeholder="Your comment..."></textarea>
-            <div class="p-2 bg-light d-flex justify-content-between align-items-center">
+			<input type="hidden" value="{{target_layer}}"/>
+			<input type="hidden" value="{{comment_id}}"/>            
+			<input type="hidden" value="{{origin_no}}"/>
+			<div class="p-2 bg-light d-flex justify-content-between align-items-center">
             	<div>
             		<a href="#" class="btn btn-sm px-1 btn-light"><i class="mdi mdi-upload"></i></a>
             		<a href="#" class="btn btn-sm px-1 btn-light"><i class="mdi mdi-at"></i></a>

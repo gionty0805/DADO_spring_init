@@ -8,6 +8,7 @@ import com.dado.demo.vo.CommentVO;
 
 public interface CommentService {
 	
-	List<CommentVO> getCommentList(CommentVO vo);
-	
+	List<CommentVO> getCommentList(CommentVO cvo);
+
+    boolean registerComment(CommentVO cvo);
 }

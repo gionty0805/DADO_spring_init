@@ -15,7 +15,10 @@
 			   DELDATE,
 			   ORIGIN_NO,
 			   PARENT_ID
-            FROM TB_COMMENT WHERE TARGET_GROUP = 'BD')
+            FROM TB_COMMENT 
+            WHERE TARGET_GROUP = 'BD'
+            AND TARGET_ID = #{post_id}
+            )
              b
             WHERE b.TARGET_LAYER = 0
             UNION ALL
@@ -31,7 +34,10 @@
 			   DELDATE,
 			   ORIGIN_NO,
 			   PARENT_ID
-            FROM TB_COMMENT WHERE TARGET_GROUP = 'BD') 
+            FROM TB_COMMENT 
+            WHERE TARGET_GROUP = 'BD'
+            AND TARGET_ID = #{post_id}
+            ) 
              A
             INNER JOIN CTE C ON C.COMMENT_ID = A.PARENT_ID
         )
@@ -39,4 +45,32 @@
         ORDER BY ORIGIN_NO DESC, lvl ASC
         LIMIT #{comment_cnt}, 3
   </select> 
+  
+   <insert id="insertComment">
+
+       <selectKey resultType="com.dado.demo.vo.CommentVO" keyProperty="target_layer,comment_id" order="BEFORE">
+           <if test="origin_no != 0">
+               SELECT #{target_layer} + 1 as TARGET_LAYER,
+                   LAST_INSERT_ID(MAX(COMMENT_ID)) +1 as COMMENT_ID
+               FROM TB_COMMENT WHERE ORIGIN_NO = #{origin_no} AND TARGET_GROUP = 'BD' LIMIT 0, 1
+           </if>
+           <if test="origin_no == 0">
+               SELECT 0 as TARGET_LAYER,
+                   LAST_INSERT_ID(MAX(COMMENT_ID)) +1 as comment_id
+               FROM TB_COMMENT WHERE TARGET_GROUP = 'BD'
+           </if>
+       </selectKey>
+       INSERT INTO TB_COMMENT
+       (TARGET_GROUP, TARGET_ID, TARGET_LAYER, cont, WRITER, REGDATE, ORIGIN_NO, PARENT_ID)
+       VALUES(
+           'BD',
+           #{target_id},
+           #{target_layer},
+           #{cont},
+           #{writer},
+           sysdate(),
+           <if test="origin_no == 0">#{comment_id}</if><if test="origin_no != 0">#{origin_no}</if>,
+           #{parent_id}
+       )
+   </insert>
 </mapper>
