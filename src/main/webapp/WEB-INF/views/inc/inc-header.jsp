@@ -22,6 +22,7 @@
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/icons/dripicons/webfont.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/icons/mdiicons/css/materialdesignicons.css">
+    <link href="${pageContext.request.contextPath}/resources/icons/unicons/css/unicons.css" rel="stylesheet" />
 
     <%--jquery 는 최상단이 필요한 경우들 때문에 header로--%>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

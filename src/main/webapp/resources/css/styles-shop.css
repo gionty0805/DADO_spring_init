@@ -1,0 +1,28 @@
+.bg-cover {
+    background-repeat: no-repeat!important;
+    background-position: center center!important;
+    background-size: cover!important;
+}
+
+.font-13 {
+    font-size: 0.8rem;
+    line-height: 1.8rem;
+}
+
+.badge{
+    font-size: 60% !important;
+}
+
+.ml-minus-05{
+    margin-left: -0.5rem !important;
+}
+
+.table .action-icon:hover {
+    color: #6c757d;
+}
+.table .action-icon {
+    color: #98a6ad;
+    font-size: 1.2rem;
+    display: inline-block;
+    padding: 0 3px;
+}
