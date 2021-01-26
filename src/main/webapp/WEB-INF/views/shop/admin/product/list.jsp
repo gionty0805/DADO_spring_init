@@ -10,48 +10,42 @@
 </head>
 <body>
 <div class="container-fluid mt-5">
-    <div class="row ml-lg-3 mr-lg-3">
-        <div class="col-12">
-            <div class="page-title-box">
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="/">관리자모드</a></li>
-                        <li class="breadcrumb-item"><a href="/shop/list/${shopVO.shop_id}/1">상품관리</a></li>
-                        <li class="breadcrumb-item active">${shopVO.shop_name} List</li>
-                    </ol>
+
+    <div class="wrapper">
+
+        <%@include file="../../../inc/inc-side-shop.jsp" %>
+
+        <!-- Page Content  -->
+        <div id="content">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#">Page</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Page</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Page</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Page</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <h4 class="page-title">상품관리</h4>
-            </div>
-        </div>
-    </div>
-    <div class="row ml-lg-3 mr-lg-3">
-        <div class="col-12">
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <%--<button class="btn btn-sm btn-outline-secondary me-md-2" type="button" onclick="location.href='/shop/write/${shopVO.shop_id}'">새 글 작성</button>--%>
-            </div>
-        </div>
-    </div>
-    <div class="row mt-3 ml-lg-3 mr-lg-3">
-        <div class="col">
-            <%--<div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action bg-secondary text-white">
-                    일반게시판
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">공지사항</a>
-                <button type="button" class="list-group-item list-group-item-action">Q&A</button>
-                <button type="button" class="list-group-item list-group-item-action">FAQ</button>
-                <a href="#" class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true">폐지게시판</a>
-            </div>--%>
-            <button type="button" class="btn btn-secondary btn-block" onclick="location.href='/shop/admin/product/write'">상품등록</button>
-            <div class="email-menu-list mt-3">
-                <a href="javascript: void(0);" class="text-secondary font-weight-bold"><i class="dripicons-inbox mr-2"></i>상품관리<span class="badge rounded-pill bg-light float-right ml-2">7</span></a>
-                <a href="javascript: void(0);"><i class="dripicons-star mr-2"></i>할인상품</a>
-                <a href="javascript: void(0);"><i class="dripicons-star mr-2"></i>주문관리</a>
-                <a href="javascript: void(0);"><i class="dripicons-clock mr-2"></i>회원관리</a>
-                <a href="javascript: void(0);"><i class="dripicons-trash mr-2"></i>Analytics<span class="badge rounded-pill bg-light float-right ml-2">32</span></a>
-            </div>
-        </div>
-        <div class="col-md-10">
+            </nav>
+
             <div class="col-12">
                 <table class="table table-hover table-centered mb-0">
                     <thead>
@@ -80,42 +74,42 @@
                         <tr><td colspan="3" class="text-center">아직 등록된 상품이 없어요</td></tr>
                     </c:if>--%>
                     <%--<c:forEach items="${list}" var="shop">--%>
-                        <tr role="row">
+                    <tr role="row">
 
-                            <td class="">
-                                <img src="/resources/images/product_sample.jpeg" alt="contact-img" title="contact-img" class="rounded mr-3" height="48">
-                                <p class="m-0 d-inline-block align-middle font-16">
-                                    <a href="apps-ecommerce-products-details.html" class="text-body">고래 뿅뿅 물총</a>
-                                    <br>
-                                    <span class="text-muted">물총</span> / <span class="text-muted">워터건</span>
-                                    <br>
-                                    <span class="text-warning mdi mdi-heart"></span> 142
-                                </p>
-                            </td>
-                            <td class="">
-                                Category1
-                            </td>
-                            <td class="">
-                                03/24/2018
-                            </td>
-                            <td>
-                                \20,000
-                            </td>
+                        <td class="">
+                            <img src="/resources/images/product_sample.jpeg" alt="contact-img" title="contact-img" class="rounded mr-3" height="48">
+                            <p class="m-0 d-inline-block align-middle font-16">
+                                <a href="apps-ecommerce-products-details.html" class="text-body">고래 뿅뿅 물총</a>
+                                <br>
+                                <span class="text-muted">물총</span> / <span class="text-muted">워터건</span>
+                                <br>
+                                <span class="text-warning mdi mdi-heart"></span> 142
+                            </p>
+                        </td>
+                        <td class="">
+                            Category1
+                        </td>
+                        <td class="">
+                            03/24/2018
+                        </td>
+                        <td>
+                            \20,000
+                        </td>
 
-                            <td>
-                                204
-                            </td>
-                            <td class="sorting_1">
-                                <span class="badge badge-danger">재고없음</span>
-                            </td>
+                        <td>
+                            204
+                        </td>
+                        <td class="sorting_1">
+                            <span class="badge badge-danger">재고없음</span>
+                        </td>
 
-                            <td class="table-action" style="">
-                                <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                            </td>
-                        </tr>
-                        </tr>
+                        <td class="table-action" style="">
+                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
+                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                        </td>
+                    </tr>
+                    </tr>
                     <%--</c:forEach>--%>
                     </tbody>
                 </table>
@@ -126,9 +120,15 @@
         </div>
     </div>
 
+
+
+
+
 </div>
 
 </body>
 
 <%@include file="../../../inc/inc-footer.jsp" %>
+<script src="${pageContext.request.contextPath}/resources/scrollbar/jquery.mCustomScrollbar.js"></script>
+<script src="${pageContext.request.contextPath}/resources/scrollbar/jquery.mousewheel.js"></script>
 

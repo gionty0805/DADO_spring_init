@@ -26,6 +26,9 @@
             <li class="nav-item ml-2 font-13 text-muted">
                 <a class="nav-link" href="javascript:void(0)">도매문의</a>
             </li>
+            <li class="nav-item ml-2 font-13 text-muted">
+                <a class="nav-link" href="/shop/admin/product/list">관리자모드</a>
+            </li>
             <%--<li class="nav-item ml-2 font-13 text-muted">
                 <a class="nav-link" href="javascript:void(0)">Review</a>
             </li>
